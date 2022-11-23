@@ -2,8 +2,8 @@ use google_sheets4::api::RowData;
 
 use crate::FromCellData;
 
-pub fn create_index_map(row_data: &RowData) -> smallmap::Map<String, usize> {
-    let mut indexes_for_fields = smallmap::Map::<String, usize>::new();
+pub fn create_index_map(row_data: &RowData) -> crate::smallmap::Map<String, usize> {
+    let mut indexes_for_fields = crate::smallmap::Map::<String, usize>::new();
     for (index, item) in &mut row_data
         .values
         .clone()
@@ -25,7 +25,7 @@ pub fn create_index_map(row_data: &RowData) -> smallmap::Map<String, usize> {
 
 pub fn get_data<A: FromCellData>(
     row_data: &RowData,
-    index_map: &::smallmap::Map<String, usize>,
+    index_map: &crate::smallmap::Map<String, usize>,
     field_name: &str,
 ) -> A {
     if let Some(idx) = index_map.get(field_name) {

@@ -3,6 +3,8 @@
 #[doc(hidden)]
 pub mod __private;
 
+pub use smallmap;
+
 pub use google_sheet_derive::GoogleSheet;
 use google_sheets4::api::{CellData, ExtendedValue, GridData};
 
