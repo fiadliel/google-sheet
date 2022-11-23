@@ -1,6 +1,31 @@
-use google_sheets4::api::RowData;
+use google_sheets4::api::{CellData, RowData};
 
-use crate::{Error, FromCellData};
+use crate::{Error, FromExtendedValue};
+
+pub trait FromCellData {
+    fn from_cell_data(value: &CellData) -> Result<Self, Error>
+    where
+        Self: Sized;
+}
+
+impl<A: FromExtendedValue + Sized> FromCellData for Option<A> {
+    fn from_cell_data(value: &CellData) -> Result<Option<A>, Error> {
+        match &value.effective_value {
+            Some(v) => FromExtendedValue::from_extended_value(&v).map(|v| Some(v)),
+            None => Ok(None),
+        }
+    }
+}
+
+impl<A: FromExtendedValue> FromCellData for A {
+    fn from_cell_data(value: &CellData) -> Result<A, Error> {
+        value
+            .effective_value
+            .clone()
+            .ok_or(Error::MissingEffectiveValue)
+            .and_then(|v| FromExtendedValue::from_extended_value(&v))
+    }
+}
 
 pub fn create_index_map(row_data: &RowData) -> crate::smallmap::Map<String, usize> {
     let mut indexes_for_fields = crate::smallmap::Map::<String, usize>::new();
