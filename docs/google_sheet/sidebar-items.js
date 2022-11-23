@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":[["GoogleSheet",""]],"trait":[["FromCellData",""],["FromExtendedValue",""],["GoogleSheet",""]]};
+window.SIDEBAR_ITEMS = {"derive":[["GoogleSheet",""]],"enum":[["Error",""]],"trait":[["FromExtendedValue",""],["GoogleSheet",""]]};

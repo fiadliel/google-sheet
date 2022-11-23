@@ -33,51 +33,39 @@
 <span id="33">33</span>
 <span id="34">34</span>
 <span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
 </pre><pre class="rust"><code><span class="attribute">#![warn(clippy::pedantic)]
 
 #[doc(hidden)]
 </span><span class="kw">pub mod </span>__private;
 
 <span class="kw">pub use </span>google_sheet_derive::GoogleSheet;
-<span class="kw">use </span>google_sheets4::api::{CellData, ExtendedValue, GridData};
+<span class="kw">pub use </span>smallmap;
+
+<span class="kw">use </span>google_sheets4::api::{ExtendedValue, GridData};
+<span class="kw">use </span>thiserror::Error;
+
+<span class="attribute">#[derive(Error, Debug)]
+</span><span class="kw">pub enum </span>Error {
+    <span class="attribute">#[error(<span class="string">&quot;Missing effective value&quot;</span>)]
+    </span>MissingEffectiveValue,
+    <span class="attribute">#[error(<span class="string">&quot;Missing string value&quot;</span>)]
+    </span>MissingStringValue,
+}
 
 <span class="kw">pub trait </span>GoogleSheet&lt;A&gt; {
     <span class="doccomment">/// Extract grid data into a vec of A.
-    </span><span class="kw">fn </span>from_grid_data(sheet: <span class="kw-2">&amp;</span>GridData) -&gt; std::result::Result&lt;Vec&lt;A&gt;, ()&gt;;
+    </span><span class="kw">fn </span>from_grid_data(sheet: <span class="kw-2">&amp;</span>GridData) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;A&gt;, Error&gt;;
 }
 
 <span class="kw">pub trait </span>FromExtendedValue {
-    <span class="kw">fn </span>from_extended_value(value: <span class="kw-2">&amp;</span>ExtendedValue) -&gt; <span class="self">Self</span>;
+    <span class="kw">fn </span>from_extended_value(value: <span class="kw-2">&amp;</span>ExtendedValue) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized;
 }
 
 <span class="kw">impl </span>FromExtendedValue <span class="kw">for </span>String {
-    <span class="kw">fn </span>from_extended_value(value: <span class="kw-2">&amp;</span>ExtendedValue) -&gt; <span class="self">Self </span>{
-        value.string_value.clone().unwrap()
-    }
-}
-
-<span class="kw">pub trait </span>FromCellData {
-    <span class="kw">fn </span>from_cell_data(value: <span class="kw-2">&amp;</span>CellData) -&gt; <span class="self">Self</span>;
-}
-
-<span class="kw">impl</span>&lt;A: FromExtendedValue&gt; FromCellData <span class="kw">for </span><span class="prelude-ty">Option</span>&lt;A&gt; {
-    <span class="kw">fn </span>from_cell_data(value: <span class="kw-2">&amp;</span>CellData) -&gt; <span class="self">Self </span>{
-        value
-            .effective_value
-            .clone()
-            .map(|v| FromExtendedValue::from_extended_value(<span class="kw-2">&amp;</span>v))
-    }
-}
-
-<span class="kw">impl</span>&lt;A: FromExtendedValue&gt; FromCellData <span class="kw">for </span>A {
-    <span class="kw">fn </span>from_cell_data(value: <span class="kw-2">&amp;</span>CellData) -&gt; <span class="self">Self </span>{
-        FromExtendedValue::from_extended_value(<span class="kw-2">&amp;</span>value.effective_value.clone().unwrap())
+    <span class="kw">fn </span>from_extended_value(value: <span class="kw-2">&amp;</span>ExtendedValue) -&gt; <span class="prelude-ty">Result</span>&lt;String, Error&gt; {
+        value.string_value.clone().ok_or(Error::MissingStringValue)
     }
 }
 </code></pre></div>
