@@ -14,7 +14,7 @@ fn impl_named(name: &Ident, fields: &FieldsNamed) -> TokenStream {
     let recurse = fields.named.iter().map(|f| {
         let name = &f.ident;
         quote_spanned! {f.span()=>
-            #name: ::google_sheet::get_data(&this_row, &indexes_for_fields, stringify!(#name))
+            #name: ::google_sheet::__private::get_data(&this_row, &indexes_for_fields, stringify!(#name))
         }
     });
     let gen = quote! {
@@ -22,7 +22,7 @@ fn impl_named(name: &Ident, fields: &FieldsNamed) -> TokenStream {
             fn from_grid_data(data: &::google_sheets4::api::GridData) -> std::result::Result<Vec<#name>, ()> {
                 if let Some(row_data) = &data.row_data {
                     if let Some(first_row) = row_data.get(0) {
-                        let indexes_for_fields = ::google_sheet::create_index_map(&first_row);
+                        let indexes_for_fields = ::google_sheet::__private::create_index_map(&first_row);
                         let mut result = Vec::with_capacity(row_data.len());
                         for row in 1..row_data.len() {
                             if let Some(this_row) = row_data.get(row) {
