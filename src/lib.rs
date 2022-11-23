@@ -4,7 +4,6 @@
 pub mod __private;
 
 pub use google_sheet_derive::GoogleSheet;
-pub use smallmap;
 
 use google_sheets4::api::{ExtendedValue, GridData};
 use thiserror::Error;
