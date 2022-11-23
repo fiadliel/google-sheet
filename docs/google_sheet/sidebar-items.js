@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":[["GoogleSheet",""]],"trait":[["FromCellData",""],["FromExtendedValue",""],["GoogleSheet",""]]};
