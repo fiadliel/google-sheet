@@ -23,5 +23,5 @@ This will derive an implementation:
 ```rust
 let grid_data: &GridData = ...;
 
-let _values: Vec<MyStruct> = MyStruct::from_grid_data(&grid_data);
+let _values: Result<Vec<MyStruct>, Error> = MyStruct::from_grid_data(&grid_data);
 ```
