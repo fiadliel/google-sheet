@@ -18,11 +18,21 @@ pub enum Error {
 }
 
 pub trait GoogleSheet<A> {
-    /// Extract grid data into a vec of A.
+    /// Convert `GridData` from a Google spreadsheet into a vector of structs.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the data has a shape
+    /// that cannot be handled by this library.
     fn from_grid_data(sheet: &GridData) -> Result<Vec<A>, Error>;
 }
 
 pub trait FromExtendedValue {
+    /// Describe how to convert an `ExtendedValue` into the Self type.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the conversion was not possible.
     fn from_extended_value(value: &ExtendedValue) -> Result<Self, Error>
     where
         Self: Sized;
