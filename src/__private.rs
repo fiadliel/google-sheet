@@ -1,6 +1,6 @@
 use google_sheets4::api::RowData;
 
-use crate::FromCellData;
+use crate::{Error, FromCellData};
 
 pub fn create_index_map(row_data: &RowData) -> crate::smallmap::Map<String, usize> {
     let mut indexes_for_fields = crate::smallmap::Map::<String, usize>::new();
@@ -23,11 +23,11 @@ pub fn create_index_map(row_data: &RowData) -> crate::smallmap::Map<String, usiz
     indexes_for_fields
 }
 
-pub fn get_data<A: FromCellData>(
+pub fn get_data<A: FromCellData + Sized>(
     row_data: &RowData,
     index_map: &crate::smallmap::Map<String, usize>,
     field_name: &str,
-) -> A {
+) -> Result<A, Error> {
     if let Some(idx) = index_map.get(field_name) {
         if let Some(cell_data) = row_data
             .values

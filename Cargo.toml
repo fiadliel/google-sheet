@@ -7,3 +7,4 @@ edition = "2021"
 google-sheets4 = "4.0.1"
 google-sheet-derive = { version = "0.1.0", path = "google-sheet-derive" }
 smallmap = "1.4.0"
+thiserror = "1.0.37"
