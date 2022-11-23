@@ -62,9 +62,9 @@ pub fn get_data<A: FromCellData + Sized>(
         {
             FromCellData::from_cell_data(cell_data)
         } else {
-            todo!()
+            Err(Error::NoDataInColumn)
         }
     } else {
-        todo!()
+        Err(Error::ColumnNameNotFound)
     }
 }

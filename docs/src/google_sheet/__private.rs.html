@@ -132,10 +132,10 @@
         {
             FromCellData::from_cell_data(cell_data)
         } <span class="kw">else </span>{
-            <span class="macro">todo!</span>()
+            <span class="prelude-val">Err</span>(Error::NoDataInColumn)
         }
     } <span class="kw">else </span>{
-        <span class="macro">todo!</span>()
+        <span class="prelude-val">Err</span>(Error::ColumnNameNotFound)
     }
 }
 </code></pre></div>

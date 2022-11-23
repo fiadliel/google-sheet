@@ -15,6 +15,12 @@ pub enum Error {
     MissingEffectiveValue,
     #[error("Missing string value")]
     MissingStringValue,
+    #[error("No row data")]
+    NoRowData,
+    #[error("No data in column")]
+    NoDataInColumn,
+    #[error("Column name not found")]
+    ColumnNameNotFound,
 }
 
 pub trait GoogleSheet<A> {

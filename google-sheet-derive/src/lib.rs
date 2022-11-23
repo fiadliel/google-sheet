@@ -34,10 +34,10 @@ fn impl_named(name: &Ident, fields: &FieldsNamed) -> TokenStream {
                         }
                         Ok(result)
                     } else {
-                        todo!()
+                        Err(::google_sheet::Error::NoRowData)
                     }
                 } else {
-                    todo!()
+                    Err(::google_sheet::Error::NoRowData)
                 }
             }
         }
